@@ -1,2 +1,18 @@
 body {
-  background-color: #fff; }
+  padding: 0;
+  margin: 0; }
+
+.game {
+  background-image: url("https://i.pinimg.com/474x/40/b4/c6/40b4c6996a1a8f67cf33248690aa6fbc--web-project-background-patterns.jpg");
+  width: 100vw;
+  height: 100vh;
+  mix-blend-mode: multiply;
+  position: relative; }
+
+#canvas {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  margin: auto; }
