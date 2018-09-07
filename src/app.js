@@ -28,6 +28,10 @@ ctx.fillRect(0, 0, canvas.width, canvas.height )
 loadGraphic(ctx).then(graphic => {
     console.log(graphic)
     graphic.pathes.forEach((tile, idx) => {
-        tile.draw(idx, 0);
+        if(idx < 9) {
+            tile.draw(idx, 0);
+        } else {
+            tile.draw(idx - 8, 2);
+        }
     })
 });

@@ -90,8 +90,8 @@ var pathesSrc = 'assets/pathes/';
 
 function loadPathes(ctx) {
   return new Promise(function (resolve) {
-    Promise.all([loadImg("".concat(pathesSrc, "rotated-t.png")), loadImg("".concat(pathesSrc, "cornerR.png")), loadImg("".concat(pathesSrc, "cross.png")), loadImg("".concat(pathesSrc, "straight.png")), loadImg("".concat(pathesSrc, "edge.png")), loadImg("".concat(pathesSrc, "cornerL.png")), loadImg("".concat(pathesSrc, "edgeL.png")), loadImg("".concat(pathesSrc, "tr.png")), loadImg("".concat(pathesSrc, "tb.png")), loadImg("".concat(pathesSrc, "tl.png")), loadImg("".concat(pathesSrc, "vert.png"))]).then(function (_ref) {
-      var _ref2 = _slicedToArray(_ref, 11),
+    Promise.all([loadImg("".concat(pathesSrc, "rotated-t.png")), loadImg("".concat(pathesSrc, "cornerR.png")), loadImg("".concat(pathesSrc, "cross.png")), loadImg("".concat(pathesSrc, "straight.png")), loadImg("".concat(pathesSrc, "edge.png")), loadImg("".concat(pathesSrc, "cornerL.png")), loadImg("".concat(pathesSrc, "edgeL.png")), loadImg("".concat(pathesSrc, "tr.png")), loadImg("".concat(pathesSrc, "tb.png")), loadImg("".concat(pathesSrc, "tl.png")), loadImg("".concat(pathesSrc, "vert.png")), loadImg("".concat(pathesSrc, "cornerLT.png")), loadImg("".concat(pathesSrc, "cornerRT.png"))]).then(function (_ref) {
+      var _ref2 = _slicedToArray(_ref, 13),
           rotT = _ref2[0],
           cornerR = _ref2[1],
           cross = _ref2[2],
@@ -102,7 +102,9 @@ function loadPathes(ctx) {
           tr = _ref2[7],
           tb = _ref2[8],
           tl = _ref2[9],
-          vert = _ref2[10];
+          vert = _ref2[10],
+          cornerLT = _ref2[11],
+          cornerRT = _ref2[12];
 
       var rotTTile = new BgTile(ctx, rotT);
       var cornerRightTile = new BgTile(ctx, cornerR);
@@ -115,7 +117,9 @@ function loadPathes(ctx) {
       var tbTile = new BgTile(ctx, tb);
       var tlTile = new BgTile(ctx, tl);
       var vertLine = new BgTile(ctx, vert);
-      resolve([rotTTile, cornerRightTile, crossTile, horisontalTile, rightEdge, cornerLeft, leftEdge, trTile, tbTile, tlTile, vertLine]);
+      var ltCorner = new BgTile(ctx, cornerLT);
+      var rtCorner = new BgTile(ctx, cornerRT);
+      resolve([rotTTile, cornerRightTile, crossTile, horisontalTile, rightEdge, cornerLeft, leftEdge, trTile, tbTile, tlTile, vertLine, ltCorner, rtCorner]);
     });
   });
 }
@@ -153,6 +157,10 @@ ctx.fillRect(0, 0, canvas.width, canvas.height); // Promise.all([
 loadGraphic(ctx).then(function (graphic) {
   console.log(graphic);
   graphic.pathes.forEach(function (tile, idx) {
-    tile.draw(idx, 0);
+    if (idx < 9) {
+      tile.draw(idx, 0);
+    } else {
+      tile.draw(idx - 8, 2);
+    }
   });
 });

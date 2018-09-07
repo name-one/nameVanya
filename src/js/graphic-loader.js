@@ -16,8 +16,10 @@ function loadPathes(ctx) {
             loadImg(`${pathesSrc}tr.png`),
             loadImg(`${pathesSrc}tb.png`),
             loadImg(`${pathesSrc}tl.png`),
-            loadImg(`${pathesSrc}vert.png`)
-        ]).then(([rotT, cornerR, cross, horisontalLine, edge, cornerL, edgeL, tr, tb, tl, vert]) => {
+            loadImg(`${pathesSrc}vert.png`),
+            loadImg(`${pathesSrc}cornerLT.png`),
+            loadImg(`${pathesSrc}cornerRT.png`)
+        ]).then(([rotT, cornerR, cross, horisontalLine, edge, cornerL, edgeL, tr, tb, tl, vert, cornerLT, cornerRT]) => {
             const rotTTile = new BgTile(ctx, rotT);
             const cornerRightTile = new BgTile(ctx, cornerR);
             const crossTile = new BgTile(ctx, cross);
@@ -28,7 +30,9 @@ function loadPathes(ctx) {
             const trTile = new BgTile(ctx, tr);
             const tbTile = new BgTile(ctx, tb);
             const tlTile = new BgTile(ctx, tl);
-            const vertLine = new BgTile(ctx, vert)
+            const vertLine = new BgTile(ctx, vert);
+            const ltCorner = new BgTile(ctx, cornerLT);
+            const rtCorner = new BgTile(ctx, cornerRT);
             resolve([
                 rotTTile,
                 cornerRightTile,
@@ -40,7 +44,9 @@ function loadPathes(ctx) {
                 trTile,
                 tbTile,
                 tlTile,
-                vertLine
+                vertLine,
+                ltCorner,
+                rtCorner
             ]);
 
         });
