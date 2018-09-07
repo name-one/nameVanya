@@ -87,6 +87,7 @@ var legend = new Map();
 legend.set('#', 'wall');
 legend.set('-', 'road');
 var pathesSrc = 'assets/pathes/';
+var bugsSrc = 'assets/bugs/';
 
 function loadPathes(ctx) {
   return new Promise(function (resolve) {
@@ -124,14 +125,34 @@ function loadPathes(ctx) {
   });
 }
 
+function loadBugs(ctx) {
+  return new Promise(function (resolve) {
+    Promise.all([loadImg("".concat(bugsSrc, "bug1.png")), loadImg("".concat(bugsSrc, "bug2.png")), loadImg("".concat(bugsSrc, "bug3.png")), loadImg("".concat(bugsSrc, "bug4.png"))]).then(function (_ref3) {
+      var _ref4 = _slicedToArray(_ref3, 4),
+          bug1 = _ref4[0],
+          bug2 = _ref4[1],
+          bug3 = _ref4[2],
+          bug4 = _ref4[3];
+
+      var bugTile1 = new BgTile(ctx, bug1);
+      var bugTile2 = new BgTile(ctx, bug2);
+      var bugTile3 = new BgTile(ctx, bug3);
+      var bugTile4 = new BgTile(ctx, bug4);
+      resolve([bugTile1, bugTile2, bugTile3, bugTile4]);
+    });
+  });
+}
+
 function loadGraphic(ctx) {
   return new Promise(function (resolve) {
-    Promise.all([loadPathes(ctx)]).then(function (_ref3) {
-      var _ref4 = _slicedToArray(_ref3, 1),
-          pathes = _ref4[0];
+    Promise.all([loadPathes(ctx), loadBugs(ctx)]).then(function (_ref5) {
+      var _ref6 = _slicedToArray(_ref5, 2),
+          pathes = _ref6[0],
+          bugs = _ref6[1];
 
       resolve({
-        pathes: pathes
+        pathes: pathes,
+        bugs: bugs
       });
     });
   });

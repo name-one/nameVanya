@@ -1,6 +1,7 @@
 import loadImg from './image-loader';
 import BgTile from './bg-tile';
-const pathesSrc = 'assets/pathes/'
+const pathesSrc = 'assets/pathes/';
+const bugsSrc = 'assets/bugs/';
 
 
 function loadPathes(ctx) {
@@ -53,13 +54,33 @@ function loadPathes(ctx) {
     });
 }
 
+function loadBugs(ctx) {
+    return new Promise(resolve => {
+        Promise.all([
+            loadImg(`${bugsSrc}bug1.png`),
+            loadImg(`${bugsSrc}bug2.png`),
+            loadImg(`${bugsSrc}bug3.png`),
+            loadImg(`${bugsSrc}bug4.png`)
+        ]).then(([bug1, bug2, bug3, bug4]) => {
+            const bugTile1 = new BgTile(ctx, bug1);
+            const bugTile2 = new BgTile(ctx, bug2);
+            const bugTile3 = new BgTile(ctx, bug3);
+            const bugTile4 = new BgTile(ctx, bug4);
+
+            resolve([bugTile1, bugTile2, bugTile3, bugTile4])
+        });
+    });
+}
+
 export default function loadGraphic(ctx) {
     return new Promise(resolve => {
         Promise.all([
-            loadPathes(ctx)
-        ]).then(([pathes]) => {
+            loadPathes(ctx),
+            loadBugs(ctx)
+        ]).then(([pathes, bugs]) => {
             resolve({
-                pathes
+                pathes,
+                bugs
             });
         });
     })
