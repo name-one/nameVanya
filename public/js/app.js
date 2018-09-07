@@ -88,6 +88,7 @@ legend.set('#', 'wall');
 legend.set('-', 'road');
 var pathesSrc = 'assets/pathes/';
 var bugsSrc = 'assets/bugs/';
+var dragonSrc = '/assets/dragon/';
 
 function loadPathes(ctx) {
   return new Promise(function (resolve) {
@@ -143,16 +144,38 @@ function loadBugs(ctx) {
   });
 }
 
+function loadDragon(ctx) {
+  return new Promise(function (resolve) {
+    debugger;
+    Promise.all([loadImg("".concat(dragonSrc, "vano_splash.png")), loadImg("".concat(dragonSrc, "vano1.png")), loadImg("".concat(dragonSrc, "vano2.png")), loadImg("".concat(dragonSrc, "vano3.png"))]).then(function (_ref5) {
+      var _ref6 = _slicedToArray(_ref5, 4),
+          dragonSplash = _ref6[0],
+          dragon1 = _ref6[1],
+          dragon2 = _ref6[2],
+          dragon3 = _ref6[3];
+
+      var dragonSplashTile = new BgTile(ctx, dragonSplash);
+      var dragon1Tile = new BgTile(ctx, dragon1);
+      var dragon2Tile = new BgTile(ctx, dragon2);
+      var dragon3Tile = new BgTile(ctx, dragon3);
+      resolve([dragonSplashTile, dragon1Tile, dragon2Tile, dragon3Tile]);
+    });
+  });
+}
+
 function loadGraphic(ctx) {
   return new Promise(function (resolve) {
-    Promise.all([loadPathes(ctx), loadBugs(ctx)]).then(function (_ref5) {
-      var _ref6 = _slicedToArray(_ref5, 2),
-          pathes = _ref6[0],
-          bugs = _ref6[1];
+    Promise.all([loadPathes(ctx), loadBugs(ctx), loadDragon(ctx)]).then(function (_ref7) {
+      var _ref8 = _slicedToArray(_ref7, 3),
+          pathes = _ref8[0],
+          bugs = _ref8[1],
+          dragon = _ref8[2];
 
+      debugger;
       resolve({
         pathes: pathes,
-        bugs: bugs
+        bugs: bugs,
+        dragon: dragon
       });
     });
   });

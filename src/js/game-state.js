@@ -1,6 +1,6 @@
 
 export default class GameState{
-    constructor(){
+    constructor(ctx, canvas) {
         this.collectedBugs=0;
         this.uncollectedBugs=0;
         this.gameTime='';
@@ -8,19 +8,19 @@ export default class GameState{
         this.isWin=false;
         this.isLose=false;
         this.graphics=null;
+        this.gameMap = [];
+        this.ctx = ctx;
+        this.canvas = canvas;
     }
 
-    setGraphics(graphis){
+    setGraphics(graphics){
         this.graphics = graphics;
     }
+
+    loadLevel(level) {
+        this.gameMap = level;
+    }
+
     emitMovement(direction){}
 
-    gameLifeCycle = new GameLifeCycle()
-
-}
-
-class GameLifeCycle{
-    constructor(){}
-    render(){}
-    calculate(){}
 }

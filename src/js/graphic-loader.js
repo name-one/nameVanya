@@ -2,6 +2,7 @@ import loadImg from './image-loader';
 import BgTile from './bg-tile';
 const pathesSrc = 'assets/pathes/';
 const bugsSrc = 'assets/bugs/';
+const dragonSrc = '/assets/dragon/'
 
 
 function loadPathes(ctx) {
@@ -72,15 +73,38 @@ function loadBugs(ctx) {
     });
 }
 
+
+function loadDragon(ctx) {
+    return new Promise(resolve => {
+        debugger
+        Promise.all([
+            loadImg(`${dragonSrc}vano_splash.png`),
+            loadImg(`${dragonSrc}vano1.png`),
+            loadImg(`${dragonSrc}vano2.png`),
+            loadImg(`${dragonSrc}vano3.png`)
+        ]).then(([dragonSplash, dragon1, dragon2, dragon3]) => {
+            let dragonSplashTile = new BgTile(ctx, dragonSplash);
+            const dragon1Tile = new BgTile(ctx, dragon1);
+            const dragon2Tile = new BgTile(ctx, dragon2);
+            const dragon3Tile = new BgTile(ctx, dragon3);
+
+            resolve([dragonSplashTile, dragon1Tile, dragon2Tile, dragon3Tile])
+        })
+    });
+}
+
 export default function loadGraphic(ctx) {
     return new Promise(resolve => {
         Promise.all([
             loadPathes(ctx),
-            loadBugs(ctx)
-        ]).then(([pathes, bugs]) => {
+            loadBugs(ctx),
+            loadDragon(ctx)
+        ]).then(([pathes, bugs,dragon]) => {
+            debugger
             resolve({
                 pathes,
-                bugs
+                bugs,
+                dragon
             });
         });
     })
