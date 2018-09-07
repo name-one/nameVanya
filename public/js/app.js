@@ -85,8 +85,8 @@ var dragonSrc = '/assets/dragon/';
 
 function loadPathes(ctx) {
   return new Promise(function (resolve) {
-    Promise.all([loadImg("".concat(pathesSrc, "rotated-t.png")), loadImg("".concat(pathesSrc, "cornerR.png")), loadImg("".concat(pathesSrc, "cross.png")), loadImg("".concat(pathesSrc, "straight.png")), loadImg("".concat(pathesSrc, "edge.png")), loadImg("".concat(pathesSrc, "cornerL.png")), loadImg("".concat(pathesSrc, "edgeL.png")), loadImg("".concat(pathesSrc, "tr.png")), loadImg("".concat(pathesSrc, "tb.png")), loadImg("".concat(pathesSrc, "tl.png")), loadImg("".concat(pathesSrc, "vert.png")), loadImg("".concat(pathesSrc, "cornerLT.png")), loadImg("".concat(pathesSrc, "cornerRT.png"))]).then(function (_ref) {
-      var _ref2 = _slicedToArray(_ref, 13),
+    Promise.all([loadImg("".concat(pathesSrc, "rotated-t.png")), loadImg("".concat(pathesSrc, "cornerR.png")), loadImg("".concat(pathesSrc, "cross.png")), loadImg("".concat(pathesSrc, "straight.png")), loadImg("".concat(pathesSrc, "edge.png")), loadImg("".concat(pathesSrc, "cornerL.png")), loadImg("".concat(pathesSrc, "edgeL.png")), loadImg("".concat(pathesSrc, "tr.png")), loadImg("".concat(pathesSrc, "tb.png")), loadImg("".concat(pathesSrc, "tl.png")), loadImg("".concat(pathesSrc, "vert.png")), loadImg("".concat(pathesSrc, "cornerLT.png")), loadImg("".concat(pathesSrc, "cornerRT.png")), loadImg("".concat(pathesSrc, "edgeT.png")), loadImg("".concat(pathesSrc, "edgeB.png"))]).then(function (_ref) {
+      var _ref2 = _slicedToArray(_ref, 15),
           rotT = _ref2[0],
           cornerR = _ref2[1],
           cross = _ref2[2],
@@ -99,7 +99,9 @@ function loadPathes(ctx) {
           tl = _ref2[9],
           vert = _ref2[10],
           cornerLT = _ref2[11],
-          cornerRT = _ref2[12];
+          cornerRT = _ref2[12],
+          edgeT = _ref2[13],
+          edgeB = _ref2[14];
 
       var rotTTile = new BgTile(ctx, rotT);
       var cornerRightTile = new BgTile(ctx, cornerR);
@@ -114,7 +116,9 @@ function loadPathes(ctx) {
       var vertLine = new BgTile(ctx, vert);
       var ltCorner = new BgTile(ctx, cornerLT);
       var rtCorner = new BgTile(ctx, cornerRT);
-      resolve([rotTTile, cornerRightTile, crossTile, horisontalTile, rightEdge, cornerLeft, leftEdge, trTile, tbTile, tlTile, vertLine, ltCorner, rtCorner]);
+      var edtTile = new BgTile(ctx, edgeT);
+      var edbTile = new BgTile(ctx, edgeB);
+      resolve([rotTTile, cornerRightTile, crossTile, horisontalTile, rightEdge, cornerLeft, leftEdge, trTile, tbTile, tlTile, vertLine, ltCorner, rtCorner, edtTile, edbTile]);
     });
   });
 }
@@ -139,7 +143,6 @@ function loadBugs(ctx) {
 
 function loadDragon(ctx) {
   return new Promise(function (resolve) {
-    debugger;
     Promise.all([loadImg("".concat(dragonSrc, "vano_splash.png")), loadImg("".concat(dragonSrc, "vano1.png")), loadImg("".concat(dragonSrc, "vano2.png")), loadImg("".concat(dragonSrc, "vano3.png"))]).then(function (_ref5) {
       var _ref6 = _slicedToArray(_ref5, 4),
           dragonSplash = _ref6[0],
@@ -164,7 +167,6 @@ function loadGraphic(ctx) {
           bugs = _ref8[1],
           dragon = _ref8[2];
 
-      debugger;
       resolve({
         pathes: pathes,
         bugs: bugs,
@@ -191,24 +193,36 @@ function () {
     this.ctx = ctx;
     this.canvas = canvas;
     this.textMap;
+    this.tileStore = new Map();
   }
 
   _createClass(GameState, [{
+    key: "initTilesHash",
+    value: function initTilesHash() {
+      var _this = this;
+
+      var keys = [327, 485, 325, 455, 463, 461, 487, 357, 453, 333, 365, 335, 359, 493, 367];
+      keys.forEach(function (item, idx) {
+        _this.tileStore.set(item, _this.graphics.pathes[idx]);
+      });
+    }
+  }, {
     key: "setGraphics",
     value: function setGraphics(graphics) {
       this.graphics = graphics;
+      this.initTilesHash();
     }
   }, {
     key: "loadLevel",
     value: function loadLevel(txtFile) {
-      var _this = this;
+      var _this2 = this;
 
       fetch(txtFile).then(function (response) {
         return response.text();
       }).then(function (text) {
-        _this.textMap = text;
+        _this2.textMap = text;
 
-        _this.renderLevel(text.split('\n').map(function (row) {
+        _this2.renderLevel(text.split('\n').map(function (row) {
           return row.split('');
         }));
       });
@@ -216,14 +230,27 @@ function () {
   }, {
     key: "renderLevel",
     value: function renderLevel(level) {
-      var _this2 = this;
+      var _this3 = this;
 
       level.forEach(function (row, rowIdx) {
         row.forEach(function (cell, cellIdx) {
           switch (cell) {
             case '-':
-              _this2.graphics.pathes[0].draw(cellIdx, rowIdx); // console.log(rowIdx -1)
+              //this.graphics.pathes[0].draw(cellIdx, rowIdx);
+              var hashIdx = _this3.encode(level, cellIdx, rowIdx);
 
+              console.log(hashIdx);
+
+              if (!_this3.tileStore.get(hashIdx)) {
+                hashIdx |= 325;
+              }
+
+              if (!_this3.tileStore.get(hashIdx)) {
+                debugger;
+                return;
+              }
+
+              _this3.tileStore.get(hashIdx).draw(cellIdx, rowIdx);
 
               break;
 
@@ -232,6 +259,32 @@ function () {
           }
         });
       });
+    }
+  }, {
+    key: "encode",
+    value: function encode(level, x, y) {
+      var res = 0; //-1 row
+
+      res |= x === 0 || y === 0 || level[y - 1][x - 1] === '#' ? 1 : 0;
+      res <<= 1;
+      res |= y === 0 || level[y - 1][x] === '#' ? 1 : 0;
+      res <<= 1;
+      res |= y === 0 || x === level[y - 1].length - 1 || level[y - 1][x + 1] === '#' ? 1 : 0;
+      res <<= 1; // 0 row
+
+      res |= x === 0 || level[y][x - 1] === '#' ? 1 : 0;
+      res <<= 1;
+      res |= level[y][x] === '#' ? 1 : 0;
+      res <<= 1;
+      res |= x === level[y].length - 1 || level[y][x + 1] === '#' ? 1 : 0;
+      res <<= 1; // +1 row
+
+      res |= x === 0 || y === level.length - 1 || level[y + 1][x - 1] === '#' ? 1 : 0;
+      res <<= 1;
+      res |= y === level.length - 1 || level[y + 1][x] === '#' ? 1 : 0;
+      res <<= 1;
+      res |= y === level.length - 1 || x === level[y + 1].length - 1 || level[y + 1][x + 1] === '#' ? 1 : 0;
+      return res;
     }
   }, {
     key: "emitMovement",

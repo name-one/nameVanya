@@ -20,8 +20,10 @@ function loadPathes(ctx) {
             loadImg(`${pathesSrc}tl.png`),
             loadImg(`${pathesSrc}vert.png`),
             loadImg(`${pathesSrc}cornerLT.png`),
-            loadImg(`${pathesSrc}cornerRT.png`)
-        ]).then(([rotT, cornerR, cross, horisontalLine, edge, cornerL, edgeL, tr, tb, tl, vert, cornerLT, cornerRT]) => {
+            loadImg(`${pathesSrc}cornerRT.png`),
+            loadImg(`${pathesSrc}edgeT.png`),
+            loadImg(`${pathesSrc}edgeB.png`)
+        ]).then(([rotT, cornerR, cross, horisontalLine, edge, cornerL, edgeL, tr, tb, tl, vert, cornerLT, cornerRT, edgeT, edgeB]) => {
             const rotTTile = new BgTile(ctx, rotT);
             const cornerRightTile = new BgTile(ctx, cornerR);
             const crossTile = new BgTile(ctx, cross);
@@ -35,6 +37,8 @@ function loadPathes(ctx) {
             const vertLine = new BgTile(ctx, vert);
             const ltCorner = new BgTile(ctx, cornerLT);
             const rtCorner = new BgTile(ctx, cornerRT);
+            const edtTile = new BgTile(ctx, edgeT);
+            const edbTile = new BgTile(ctx, edgeB);
             resolve([
                 rotTTile,
                 cornerRightTile,
@@ -48,7 +52,9 @@ function loadPathes(ctx) {
                 tlTile,
                 vertLine,
                 ltCorner,
-                rtCorner
+                rtCorner,
+                edtTile,
+                edbTile
             ]);
 
         });
@@ -76,7 +82,6 @@ function loadBugs(ctx) {
 
 function loadDragon(ctx) {
     return new Promise(resolve => {
-        debugger
         Promise.all([
             loadImg(`${dragonSrc}vano_splash.png`),
             loadImg(`${dragonSrc}vano1.png`),
@@ -100,7 +105,6 @@ export default function loadGraphic(ctx) {
             loadBugs(ctx),
             loadDragon(ctx)
         ]).then(([pathes, bugs,dragon]) => {
-            debugger
             resolve({
                 pathes,
                 bugs,
