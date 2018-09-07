@@ -77,15 +77,8 @@ function (_Tile) {
   }
 
   return BgTile;
-}(Tile); // const legend = {
-//     wall: '#',
-//     road: '-'
-// }
+}(Tile);
 
-
-var legend = new Map();
-legend.set('#', 'wall');
-legend.set('-', 'road');
 var pathesSrc = 'assets/pathes/';
 var bugsSrc = 'assets/bugs/';
 
@@ -158,30 +151,79 @@ function loadGraphic(ctx) {
   });
 }
 
+var GameState =
+/*#__PURE__*/
+function () {
+  function GameState(ctx, canvas) {
+    _classCallCheck(this, GameState);
+
+    this.collectedBugs = 0;
+    this.uncollectedBugs = 0;
+    this.gameTime = '';
+    this.coffeeCups = 0;
+    this.isWin = false;
+    this.isLose = false;
+    this.graphics = null;
+    this.gameMap = [];
+    this.ctx = ctx;
+    this.canvas = canvas;
+    this.textMap;
+  }
+
+  _createClass(GameState, [{
+    key: "setGraphics",
+    value: function setGraphics(graphics) {
+      this.graphics = graphics;
+    }
+  }, {
+    key: "loadLevel",
+    value: function loadLevel(txtFile) {
+      var _this = this;
+
+      fetch(txtFile).then(function (response) {
+        return response.text();
+      }).then(function (text) {
+        _this.textMap = text;
+
+        _this.renderLevel(text.split('\n').map(function (row) {
+          return row.split('');
+        }));
+      });
+    }
+  }, {
+    key: "renderLevel",
+    value: function renderLevel(level) {
+      var _this2 = this;
+
+      level.forEach(function (row, rowIdx) {
+        row.forEach(function (cell, cellIdx) {
+          switch (cell) {
+            case '-':
+              _this2.graphics.pathes[0].draw(cellIdx, rowIdx);
+
+              break;
+
+            default:
+              break;
+          }
+        });
+      });
+    }
+  }, {
+    key: "emitMovement",
+    value: function emitMovement(direction) {}
+  }]);
+
+  return GameState;
+}();
+
 var canvas = document.getElementById('canvas');
 var ctx = canvas.getContext('2d');
+var gameState = new GameState(ctx, canvas);
 ctx.fillStyle = '#5fa2b9';
-ctx.fillRect(0, 0, canvas.width, canvas.height); // Promise.all([
-//     imgLoad(tile),
-//     loadMap('assets/pathes/level.txt')
-// ]).then(([img, textMap]) => {
-//     //const wall = new Tile(ctx, img, 16, 16, 16, 16, 40, 40);
-//     const road = new Tile(ctx, img, 48, 32, 16, 16, 40, 40);
-//     const wall = new BgTile(ctx, img, 64, 64)
-//     wall.draw(0,0)
-//     // genereteMap(textMap, {
-//     //     wall,
-//     //     road
-//     // });
-// })
-
+ctx.fillRect(0, 0, canvas.width, canvas.height);
 loadGraphic(ctx).then(function (graphic) {
   console.log(graphic);
-  graphic.pathes.forEach(function (tile, idx) {
-    if (idx < 9) {
-      tile.draw(idx, 0);
-    } else {
-      tile.draw(idx - 8, 2);
-    }
-  });
+  gameState.setGraphics(graphic);
+  gameState.loadLevel('/assets/level.txt');
 });
