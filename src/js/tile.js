@@ -10,7 +10,7 @@ export default class Tile{
         this.height = height;
     }
 
-    draw(x, y){
-        this.ctx.drawImage(this.img, this.tileStartX, this.tileStartY, this.tileEndX, this.tileEndY, x * this.width, y * this.height, this.width, this.height);
+    draw(x, y, absolute = 0){
+        this.ctx.drawImage(this.img, this.tileStartX, this.tileStartY, this.tileEndX, this.tileEndY, x * (absolute ? 1 : this.width), y * (absolute ? 1 : this.height), this.width, this.height);
     }
 };

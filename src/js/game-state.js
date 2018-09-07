@@ -1,6 +1,6 @@
 
 export default class GameState{
-    constructor(ctx, canvas) {
+    constructor(ctx, canvas, bg) {
         this.collectedBugs=0;
         this.uncollectedBugs=0;
         this.gameTime='';
@@ -13,6 +13,7 @@ export default class GameState{
         this.canvas = canvas;
         this.textMap;
         this.tileStore = new Map();
+        this.bg = bg;
     }
 
     initTilesHash() {
@@ -36,25 +37,28 @@ export default class GameState{
     }
 
     renderLevel(level) {
+
         level.forEach((row, rowIdx) => {
             row.forEach((cell, cellIdx) => {
-                switch(cell) {
-                    case '-' :
-                        //this.graphics.pathes[0].draw(cellIdx, rowIdx);
-                        let hashIdx = this.encode(level,cellIdx , rowIdx);
-                        console.log(hashIdx)
+                this.ctx.drawImage(this.bg, cellIdx * 64, rowIdx * 64, 64, 64);
+                if(cell !== '#') {
+                    let hashIdx = this.encode(level,cellIdx , rowIdx);
+                    if (!this.tileStore.get(hashIdx)) {
+                        hashIdx |= 325;
+                    }
+                    if (!this.tileStore.get(hashIdx)) {
+                        return;
+                    }
+                    this.tileStore.get(hashIdx).draw(cellIdx, rowIdx)
+                    if (cell === '*') {
+                        this.graphics.bugs[Math.round(Math.random() * 3)].draw(cellIdx * 64 + 16
+                            , rowIdx * 64 + 16, 1)
+                    }
 
-                        if (!this.tileStore.get(hashIdx)) {
-                            hashIdx |= 325;
-                        }
-                        if (!this.tileStore.get(hashIdx)) {
-                            debugger
-                            return;
-                        }
-                        this.tileStore.get(hashIdx).draw(cellIdx, rowIdx)
-                        break;
-                    default:
-                        break;
+                    if (cell === '@') {
+                        this.graphics.coffee.draw(cellIdx * 64 + 16
+                            , rowIdx * 64 + 20, 1)
+                    }
                 }
             });
         })

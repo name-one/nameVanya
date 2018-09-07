@@ -56,7 +56,8 @@ function () {
   _createClass(Tile, [{
     key: "draw",
     value: function draw(x, y) {
-      this.ctx.drawImage(this.img, this.tileStartX, this.tileStartY, this.tileEndX, this.tileEndY, x * this.width, y * this.height, this.width, this.height);
+      var absolute = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 0;
+      this.ctx.drawImage(this.img, this.tileStartX, this.tileStartY, this.tileEndX, this.tileEndY, x * (absolute ? 1 : this.width), y * (absolute ? 1 : this.height), this.width, this.height);
     }
   }]);
 
@@ -123,6 +124,14 @@ function loadPathes(ctx) {
   });
 }
 
+function loadCoffee(ctx) {
+  return new Promise(function (resolve) {
+    loadImg('/assets/coffee.png').then(function (img) {
+      resolve(new Tile(ctx, img, 0, 0, 33, 23, 33, 23));
+    });
+  });
+}
+
 function loadBugs(ctx) {
   return new Promise(function (resolve) {
     Promise.all([loadImg("".concat(bugsSrc, "bug1.png")), loadImg("".concat(bugsSrc, "bug2.png")), loadImg("".concat(bugsSrc, "bug3.png")), loadImg("".concat(bugsSrc, "bug4.png"))]).then(function (_ref3) {
@@ -132,10 +141,10 @@ function loadBugs(ctx) {
           bug3 = _ref4[2],
           bug4 = _ref4[3];
 
-      var bugTile1 = new BgTile(ctx, bug1);
-      var bugTile2 = new BgTile(ctx, bug2);
-      var bugTile3 = new BgTile(ctx, bug3);
-      var bugTile4 = new BgTile(ctx, bug4);
+      var bugTile1 = new Tile(ctx, bug1, 0, 0, 38, 32, 38, 32);
+      var bugTile2 = new Tile(ctx, bug2, 0, 0, 38, 32, 38, 32);
+      var bugTile3 = new Tile(ctx, bug3, 0, 0, 38, 32, 38, 32);
+      var bugTile4 = new Tile(ctx, bug4, 0, 0, 38, 32, 38, 32);
       resolve([bugTile1, bugTile2, bugTile3, bugTile4]);
     });
   });
@@ -161,16 +170,18 @@ function loadDragon(ctx) {
 
 function loadGraphic(ctx) {
   return new Promise(function (resolve) {
-    Promise.all([loadPathes(ctx), loadBugs(ctx), loadDragon(ctx)]).then(function (_ref7) {
-      var _ref8 = _slicedToArray(_ref7, 3),
+    Promise.all([loadPathes(ctx), loadBugs(ctx), loadDragon(ctx), loadCoffee(ctx)]).then(function (_ref7) {
+      var _ref8 = _slicedToArray(_ref7, 4),
           pathes = _ref8[0],
           bugs = _ref8[1],
-          dragon = _ref8[2];
+          dragon = _ref8[2],
+          coffee = _ref8[3];
 
       resolve({
         pathes: pathes,
         bugs: bugs,
-        dragon: dragon
+        dragon: dragon,
+        coffee: coffee
       });
     });
   });
@@ -179,7 +190,7 @@ function loadGraphic(ctx) {
 var GameState =
 /*#__PURE__*/
 function () {
-  function GameState(ctx, canvas) {
+  function GameState(ctx, canvas, bg) {
     _classCallCheck(this, GameState);
 
     this.collectedBugs = 0;
@@ -194,6 +205,7 @@ function () {
     this.canvas = canvas;
     this.textMap;
     this.tileStore = new Map();
+    this.bg = bg;
   }
 
   _createClass(GameState, [{
@@ -234,28 +246,28 @@ function () {
 
       level.forEach(function (row, rowIdx) {
         row.forEach(function (cell, cellIdx) {
-          switch (cell) {
-            case '-':
-              //this.graphics.pathes[0].draw(cellIdx, rowIdx);
-              var hashIdx = _this3.encode(level, cellIdx, rowIdx);
+          _this3.ctx.drawImage(_this3.bg, cellIdx * 64, rowIdx * 64, 64, 64);
 
-              console.log(hashIdx);
+          if (cell !== '#') {
+            var hashIdx = _this3.encode(level, cellIdx, rowIdx);
 
-              if (!_this3.tileStore.get(hashIdx)) {
-                hashIdx |= 325;
-              }
+            if (!_this3.tileStore.get(hashIdx)) {
+              hashIdx |= 325;
+            }
 
-              if (!_this3.tileStore.get(hashIdx)) {
-                debugger;
-                return;
-              }
+            if (!_this3.tileStore.get(hashIdx)) {
+              return;
+            }
 
-              _this3.tileStore.get(hashIdx).draw(cellIdx, rowIdx);
+            _this3.tileStore.get(hashIdx).draw(cellIdx, rowIdx);
 
-              break;
+            if (cell === '*') {
+              _this3.graphics.bugs[Math.round(Math.random() * 3)].draw(cellIdx * 64 + 16, rowIdx * 64 + 16, 1);
+            }
 
-            default:
-              break;
+            if (cell === '@') {
+              _this3.graphics.coffee.draw(cellIdx * 64 + 16, rowIdx * 64 + 20, 1);
+            }
           }
         });
       });
@@ -296,11 +308,11 @@ function () {
 
 var canvas = document.getElementById('canvas');
 var ctx = canvas.getContext('2d');
-var gameState = new GameState(ctx, canvas);
-ctx.fillStyle = '#5fa2b9';
-ctx.fillRect(0, 0, canvas.width, canvas.height);
-loadGraphic(ctx).then(function (graphic) {
-  console.log(graphic);
-  gameState.setGraphics(graphic);
-  gameState.loadLevel('/assets/level.txt');
+loadImg('assets/canvas-bg.png').then(function (img) {
+  var gameState = new GameState(ctx, canvas, img);
+  loadGraphic(ctx).then(function (graphic) {
+    console.log(graphic);
+    gameState.setGraphics(graphic);
+    gameState.loadLevel('/assets/level.txt');
+  });
 });

@@ -1,5 +1,6 @@
 import loadImg from './image-loader';
 import BgTile from './bg-tile';
+import Tile from './tile'
 const pathesSrc = 'assets/pathes/';
 const bugsSrc = 'assets/bugs/';
 const dragonSrc = '/assets/dragon/'
@@ -61,6 +62,13 @@ function loadPathes(ctx) {
     });
 }
 
+function loadCoffee(ctx) {
+    return new Promise(resolve => {
+        loadImg('/assets/coffee.png').then( img => {
+            resolve(new Tile(ctx, img, 0, 0, 33, 23, 33, 23));
+        })
+    })
+}
 function loadBugs(ctx) {
     return new Promise(resolve => {
         Promise.all([
@@ -69,10 +77,10 @@ function loadBugs(ctx) {
             loadImg(`${bugsSrc}bug3.png`),
             loadImg(`${bugsSrc}bug4.png`)
         ]).then(([bug1, bug2, bug3, bug4]) => {
-            const bugTile1 = new BgTile(ctx, bug1);
-            const bugTile2 = new BgTile(ctx, bug2);
-            const bugTile3 = new BgTile(ctx, bug3);
-            const bugTile4 = new BgTile(ctx, bug4);
+            const bugTile1 = new Tile(ctx, bug1, 0, 0, 38, 32, 38, 32);
+            const bugTile2 = new Tile(ctx, bug2, 0, 0, 38, 32, 38, 32);
+            const bugTile3 = new Tile(ctx, bug3, 0, 0, 38, 32, 38, 32);
+            const bugTile4 = new Tile(ctx, bug4, 0, 0, 38, 32, 38, 32);
 
             resolve([bugTile1, bugTile2, bugTile3, bugTile4])
         });
@@ -103,12 +111,14 @@ export default function loadGraphic(ctx) {
         Promise.all([
             loadPathes(ctx),
             loadBugs(ctx),
-            loadDragon(ctx)
-        ]).then(([pathes, bugs,dragon]) => {
+            loadDragon(ctx),
+            loadCoffee(ctx)
+        ]).then(([pathes, bugs, dragon, coffee]) => {
             resolve({
                 pathes,
                 bugs,
-                dragon
+                dragon,
+                coffee
             });
         });
     })
