@@ -33,6 +33,7 @@ export default class GameState{
                 switch(cell) {
                     case '-' :
                         this.graphics.pathes[0].draw(cellIdx, rowIdx);
+                        // console.log(rowIdx -1)
                         break;
                     default:
                         break;
@@ -40,6 +41,7 @@ export default class GameState{
             });
         })
     }
+
 
     emitMovement(direction){}
 

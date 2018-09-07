@@ -199,7 +199,8 @@ function () {
         row.forEach(function (cell, cellIdx) {
           switch (cell) {
             case '-':
-              _this2.graphics.pathes[0].draw(cellIdx, rowIdx);
+              _this2.graphics.pathes[0].draw(cellIdx, rowIdx); // console.log(rowIdx -1)
+
 
               break;
 
