@@ -4,6 +4,8 @@ export default function loadImg(url) {
         img.addEventListener('load', () => {
             resolve(img);
         });
+        img.addEventListener('error', (err) => {
+        });
         img.src = url;
     });
 }
