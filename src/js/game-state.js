@@ -11,16 +11,37 @@ export default class GameState{
         this.gameMap = [];
         this.ctx = ctx;
         this.canvas = canvas;
+        this.textMap;
     }
 
     setGraphics(graphics){
         this.graphics = graphics;
     }
 
-    loadLevel(level) {
-        this.gameMap = level;
+    loadLevel(txtFile) {
+        fetch(txtFile)
+        .then(response => response.text())
+        .then(text => {
+            this.textMap = text;
+            this.renderLevel(text.split('\n').map(row => row.split('')));
+        })
     }
 
-    emitMovement(direction){}
+    renderLevel(level) {
+        level.forEach((row, rowIdx) => {
+            row.forEach((cell, cellIdx) => {
+                switch(cell) {
+                    case '-' :
+                        this.graphics.pathes[0].draw(cellIdx, rowIdx);
+                        // console.log(rowIdx -1)
+                        break;
+                    default:
+                        break;
+                }
+            });
+        })
+    }
 
+
+    emitMovement(direction){}
 }
