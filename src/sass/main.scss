@@ -9,6 +9,26 @@ body{
     height: 100vh;
     mix-blend-mode: multiply;
     position: relative;
+    &__preloader{
+        position: fixed;
+        z-index: 9999;
+        background-color: #3d6a79;
+        background-image: url('https://files.slack.com/files-pri/T99LL75RA-FCP3J3L3D/________.png');
+        background-repeat: no-repeat;
+        background-size: 30vw 65vh;
+        background-position: 50% 50%;
+        top: 0;
+        left: 0;
+        bottom: 0;
+        right: 0;
+        transition: all 1s;
+        &_transparent{
+            opacity: 0;
+        }
+        &_hidden{
+            display: none;
+        }
+    }
 }
 #canvas{
     position: absolute;

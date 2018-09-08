@@ -434,6 +434,7 @@ function () {
 var canvas = document.getElementById('canvas');
 var ctx = canvas.getContext('2d');
 var gameEventEmitter = new GameEventEmitter();
+var loader = document.querySelector('.game__preloader');
 loadImg('assets/canvas-bg.png').then(function (img) {
   var gameState = new GameState(ctx, canvas, img);
   loadGraphic(ctx).then(function (graphic) {
@@ -441,5 +442,11 @@ loadImg('assets/canvas-bg.png').then(function (img) {
     gameState.setGraphics(graphic);
     gameState.loadLevel('/assets/level.txt');
     gameEventEmitter.subscribeOnEvents(gameState.onEvent.bind(gameState));
+    setTimeout(function () {
+      loader.classList.add('game__preloader_transparent');
+      setTimeout(function () {
+        loader.classList.add('game__preloader_hidden');
+      }, 2000);
+    }, 2000);
   });
 });
