@@ -2,9 +2,9 @@
 export default class GameState{
     constructor(ctx, canvas, bg) {
         this.collectedBugs=0;
-        this.uncollectedBugs=0;
+        this.uncollectedBugs=3;
         this.gameTime='';
-        this.coffeeCups=0;
+        this.coffeeCups=1;
         this.isWin=false;
         this.isLose=false;
         this.graphics=null;
@@ -20,31 +20,58 @@ export default class GameState{
     }
 
     MoveDragonDown(){
+        if(!this.isWall(this.splittedMap,this.dragonPositionX,this.dragonPositionY+1))
+        {
         this.splittedMap[this.dragonPositionY][this.dragonPositionX] = '-';
         this.dragonPositionY++;
         this.splittedMap[this.dragonPositionY][this.dragonPositionX] = 'D';
         this.renderLevel(this.splittedMap);
+        }
     }
 
     MoveDragonUp(){
+        if(!this.isWall(this.splittedMap,this.dragonPositionX,this.dragonPositionY-1))
+        {
         this.splittedMap[this.dragonPositionY][this.dragonPositionX] = '-';
         this.dragonPositionY--;
         this.splittedMap[this.dragonPositionY][this.dragonPositionX] = 'D';
         this.renderLevel(this.splittedMap);
+        }
     }
 
     MoveDragonLeft(){
+        if(!this.isWall(this.splittedMap,this.dragonPositionX+1,this.dragonPositionY))
+        {
         this.splittedMap[this.dragonPositionY][this.dragonPositionX] = '-';
         this.dragonPositionX++;
         this.splittedMap[this.dragonPositionY][this.dragonPositionX] = 'D';
         this.renderLevel(this.splittedMap);
+        }
     }
 
     MoveDragonRight(){
+        if(!this.isWall(this.splittedMap,this.dragonPositionX-1,this.dragonPositionY))
+        {
         this.splittedMap[this.dragonPositionY][this.dragonPositionX] = '-';
-        this.dragonPositionX++;
+        this.dragonPositionX--;
         this.splittedMap[this.dragonPositionY][this.dragonPositionX] = 'D';
         this.renderLevel(this.splittedMap);
+        }
+    }
+
+    isWall(gameMap,x,y){
+        if(gameMap[y][x] == '#') return true
+        else return false
+    }
+
+    isBug(gameMap,x,y){
+        if(gameMap[y][x] == '*') return true
+        else return false
+    }
+
+    isCoffee(gameMap,x,y){
+        if(gameMap[y][x] == '@') return true
+        else return false
     }
 
     onEvent(eventType){
