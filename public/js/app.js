@@ -414,11 +414,6 @@ loadImg('assets/canvas-bg.png').then(function (img) {
   loadGraphic(ctx).then(function (graphic) {
     console.log(graphic);
     gameState.setGraphics(graphic);
-<<<<<<< HEAD
-    gameState.loadLevel('/assets/level.txt');
-    gameState.MoveDargonDown();
-=======
     gameState.loadLevel('/assets/level.txt'); //gameEventEmitter.subscribeOnEvents(()
->>>>>>> master
   });
 });
