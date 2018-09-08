@@ -19,43 +19,60 @@ export default class GameState{
         this.dragonPositionY=0;
     }
 
+    beforeMoveChecks(gameMap,x,y){
+        this.checkBug(gameMap,x,y)
+        this.checkCoffee(gameMap,x,y)
+    }
+
+    afterMoveChecks(gameMap,x,y){
+        this.checkFinishGame()
+    }
+
     MoveDragonDown(){
         if(!this.isWall(this.splittedMap,this.dragonPositionX,this.dragonPositionY+1))
         {
+        this.beforeMoveChecks(this.splittedMap,this.dragonPositionX,this.dragonPositionY)
         this.splittedMap[this.dragonPositionY][this.dragonPositionX] = '-';
         this.dragonPositionY++;
         this.splittedMap[this.dragonPositionY][this.dragonPositionX] = 'D';
         this.renderLevel(this.splittedMap);
+        this.afterMoveChecks(this.splittedMap,this.dragonPositionX,this.dragonPositionY)
         }
     }
 
     MoveDragonUp(){
         if(!this.isWall(this.splittedMap,this.dragonPositionX,this.dragonPositionY-1))
         {
+        this.beforeMoveChecks(this.splittedMap,this.dragonPositionX,this.dragonPositionY)
         this.splittedMap[this.dragonPositionY][this.dragonPositionX] = '-';
         this.dragonPositionY--;
         this.splittedMap[this.dragonPositionY][this.dragonPositionX] = 'D';
         this.renderLevel(this.splittedMap);
+        this.afterMoveChecks(this.splittedMap,this.dragonPositionX,this.dragonPositionY)
         }
     }
 
     MoveDragonLeft(){
         if(!this.isWall(this.splittedMap,this.dragonPositionX+1,this.dragonPositionY))
         {
+        this.beforeMoveChecks(this.splittedMap,this.dragonPositionX,this.dragonPositionY)
         this.splittedMap[this.dragonPositionY][this.dragonPositionX] = '-';
         this.dragonPositionX++;
         this.splittedMap[this.dragonPositionY][this.dragonPositionX] = 'D';
         this.renderLevel(this.splittedMap);
+        this.afterMoveChecks(this.splittedMap,this.dragonPositionX,this.dragonPositionY)
         }
     }
 
     MoveDragonRight(){
         if(!this.isWall(this.splittedMap,this.dragonPositionX-1,this.dragonPositionY))
         {
+        this.beforeMoveChecks(this.splittedMap,this.dragonPositionX,this.dragonPositionY)
         this.splittedMap[this.dragonPositionY][this.dragonPositionX] = '-';
         this.dragonPositionX--;
         this.splittedMap[this.dragonPositionY][this.dragonPositionX] = 'D';
         this.renderLevel(this.splittedMap);
+        this.afterMoveChecks(this.splittedMap,this.dragonPositionX,this.dragonPositionY)
         }
     }
 
@@ -64,14 +81,20 @@ export default class GameState{
         else return false
     }
 
-    isBug(gameMap,x,y){
-        if(gameMap[y][x] == '*') return true
-        else return false
+    checkBug(gameMap,x,y){
+        if(gameMap[y][x] == '*'){
+            this.uncollectedBugs--;
+        }
     }
 
-    isCoffee(gameMap,x,y){
-        if(gameMap[y][x] == '@') return true
-        else return false
+    checkFinishGame(){
+        if(this.collectedBugs == 0) this.isWin == true
+    }
+
+    checkCoffee(gameMap,x,y){
+        if(gameMap[y][x] == '@'){
+            this.coffeeCups--;
+        }
     }
 
     onEvent(eventType){
