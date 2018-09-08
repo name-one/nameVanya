@@ -160,7 +160,7 @@ function loadDragon(ctx) {
           dragon3 = _ref6[3];
 
       var dragonSplashTile = new BgTile(ctx, dragonSplash);
-      var dragon1Tile = new BgTile(ctx, dragon1);
+      var dragon1Tile = new Tile(ctx, dragon1, 0, 0, 174, 225, 50, 60);
       var dragon2Tile = new BgTile(ctx, dragon2);
       var dragon3Tile = new BgTile(ctx, dragon3);
       resolve([dragonSplashTile, dragon1Tile, dragon2Tile, dragon3Tile]);
@@ -267,6 +267,10 @@ function () {
 
             if (cell === '@') {
               _this3.graphics.coffee.draw(cellIdx * 64 + 16, rowIdx * 64 + 20, 1);
+            }
+
+            if (cell === 'D') {
+              _this3.graphics.dragon[1].draw(cellIdx * 64 + 14, rowIdx * 64 + 2, 1);
             }
           }
         });

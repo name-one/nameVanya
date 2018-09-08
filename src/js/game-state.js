@@ -59,6 +59,9 @@ export default class GameState{
                         this.graphics.coffee.draw(cellIdx * 64 + 16
                             , rowIdx * 64 + 20, 1)
                     }
+                    if(cell === 'D') {
+                        this.graphics.dragon[1].draw(cellIdx * 64 + 14, rowIdx * 64 + 2, 1)
+                    }
                 }
             });
         })

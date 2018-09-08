@@ -97,7 +97,7 @@ function loadDragon(ctx) {
             loadImg(`${dragonSrc}vano3.png`)
         ]).then(([dragonSplash, dragon1, dragon2, dragon3]) => {
             let dragonSplashTile = new BgTile(ctx, dragonSplash);
-            const dragon1Tile = new BgTile(ctx, dragon1);
+            const dragon1Tile = new Tile(ctx, dragon1, 0, 0, 174, 225, 50, 60);
             const dragon2Tile = new BgTile(ctx, dragon2);
             const dragon3Tile = new BgTile(ctx, dragon3);
 
@@ -112,7 +112,7 @@ export default function loadGraphic(ctx) {
             loadPathes(ctx),
             loadBugs(ctx),
             loadDragon(ctx),
-            loadCoffee(ctx)
+            loadCoffee(ctx),
         ]).then(([pathes, bugs, dragon, coffee]) => {
             resolve({
                 pathes,
