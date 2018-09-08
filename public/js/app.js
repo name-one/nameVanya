@@ -351,14 +351,51 @@ function () {
   return GameState;
 }();
 
+var GameEventEmitter =
+/*#__PURE__*/
+function () {
+  function GameEventEmitter() {
+    _classCallCheck(this, GameEventEmitter);
+  }
+
+  _createClass(GameEventEmitter, [{
+    key: "construtor",
+    value: function construtor() {
+      this.subscribers = [];
+      window.addEventListener('keyup', function (e) {
+        console.log(e);
+      });
+    }
+  }, {
+    key: "subscribeOnEvents",
+    value: function subscribeOnEvents(subscriber) {
+      this.subscribers.push(subscriber);
+    }
+  }, {
+    key: "emitEvent",
+    value: function emitEvent(eventType) {
+      this.subscribers.forEach(function (subscriber) {
+        subscriber(eventType);
+      });
+    }
+  }]);
+
+  return GameEventEmitter;
+}();
+
 var canvas = document.getElementById('canvas');
 var ctx = canvas.getContext('2d');
+var gameEventEmitter = new GameEventEmitter();
 loadImg('assets/canvas-bg.png').then(function (img) {
   var gameState = new GameState(ctx, canvas, img);
   loadGraphic(ctx).then(function (graphic) {
     console.log(graphic);
     gameState.setGraphics(graphic);
+<<<<<<< HEAD
     gameState.loadLevel('/assets/level.txt');
     gameState.MoveDargonDown();
+=======
+    gameState.loadLevel('/assets/level.txt'); //gameEventEmitter.subscribeOnEvents(()
+>>>>>>> master
   });
 });
