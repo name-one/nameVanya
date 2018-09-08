@@ -1,4 +1,4 @@
-
+import * as eventTypes from './game-event-emitter';
 export default class GameState{
     constructor(ctx, canvas, bg) {
         this.collectedBugs=0;
@@ -49,7 +49,20 @@ export default class GameState{
 
     onEvent(eventType){
         switch(eventType){
-
+            case eventTypes.RIGHT: 
+                console.log('move right');
+                break;
+            case eventTypes.TOP: 
+                console.log('move top');
+                break;
+            case eventTypes.BOTTOM: 
+                console.log('move bottom');
+                break;
+            case eventTypes.LEFT: 
+                console.log('move left');
+                break;
+            default:
+                return;
         }
     }
 

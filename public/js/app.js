@@ -187,6 +187,43 @@ function loadGraphic(ctx) {
   });
 }
 
+var GameEventEmitter =
+/*#__PURE__*/
+function () {
+  function GameEventEmitter() {
+    var _this = this;
+
+    _classCallCheck(this, GameEventEmitter);
+
+    this.subscribers = [];
+    window.addEventListener('keyup', function (e) {
+      _this.emitEvent(e.keyCode);
+    });
+  }
+
+  _createClass(GameEventEmitter, [{
+    key: "subscribeOnEvents",
+    value: function subscribeOnEvents(subscriber) {
+      this.subscribers.push(subscriber);
+    }
+  }, {
+    key: "emitEvent",
+    value: function emitEvent(eventType) {
+      this.subscribers.forEach(function (subscriber) {
+        subscriber(eventType);
+      });
+    }
+  }]);
+
+  return GameEventEmitter;
+}(); // event types
+
+
+var RIGHT = 39;
+var TOP = 38;
+var LEFT = 37;
+var BOTTOM = 40;
+
 var GameState =
 /*#__PURE__*/
 function () {
@@ -245,15 +282,36 @@ function () {
     }
   }, {
     key: "onEvent",
-    value: function onEvent(eventType) {}
+    value: function onEvent(eventType) {
+      switch (eventType) {
+        case RIGHT:
+          console.log('move right');
+          break;
+
+        case TOP:
+          console.log('move top');
+          break;
+
+        case BOTTOM:
+          console.log('move bottom');
+          break;
+
+        case LEFT:
+          console.log('move left');
+          break;
+
+        default:
+          return;
+      }
+    }
   }, {
     key: "initTilesHash",
     value: function initTilesHash() {
-      var _this = this;
+      var _this2 = this;
 
       var keys = [327, 485, 325, 455, 463, 461, 487, 357, 453, 333, 365, 335, 359, 493, 367];
       keys.forEach(function (item, idx) {
-        _this.tileStore.set(item, _this.graphics.pathes[idx]);
+        _this2.tileStore.set(item, _this2.graphics.pathes[idx]);
       });
     }
   }, {
@@ -265,53 +323,53 @@ function () {
   }, {
     key: "loadLevel",
     value: function loadLevel(txtFile) {
-      var _this2 = this;
+      var _this3 = this;
 
       fetch(txtFile).then(function (response) {
         return response.text();
       }).then(function (text) {
-        _this2.textMap = text;
-        _this2.splittedMap = text.split('\n').map(function (row) {
+        _this3.textMap = text;
+        _this3.splittedMap = text.split('\n').map(function (row) {
           return row.split('');
         });
 
-        _this2.renderLevel(_this2.splittedMap);
+        _this3.renderLevel(_this3.splittedMap);
       }).then(function (data) {
-        _this2.MoveDragonDown();
+        _this3.MoveDragonDown();
       });
     }
   }, {
     key: "renderLevel",
     value: function renderLevel(level) {
-      var _this3 = this;
+      var _this4 = this;
 
       level.forEach(function (row, rowIdx) {
         row.forEach(function (cell, cellIdx) {
-          _this3.ctx.drawImage(_this3.bg, cellIdx * 64, rowIdx * 64, 64, 64);
+          _this4.ctx.drawImage(_this4.bg, cellIdx * 64, rowIdx * 64, 64, 64);
 
           if (cell !== '#') {
-            var hashIdx = _this3.encode(level, cellIdx, rowIdx);
+            var hashIdx = _this4.encode(level, cellIdx, rowIdx);
 
-            if (!_this3.tileStore.get(hashIdx)) {
+            if (!_this4.tileStore.get(hashIdx)) {
               hashIdx |= 325;
             }
 
-            if (!_this3.tileStore.get(hashIdx)) {
+            if (!_this4.tileStore.get(hashIdx)) {
               return;
             }
 
-            _this3.tileStore.get(hashIdx).draw(cellIdx, rowIdx);
+            _this4.tileStore.get(hashIdx).draw(cellIdx, rowIdx);
 
             if (cell === '*') {
-              _this3.graphics.bugs[Math.round(Math.random() * 3)].draw(cellIdx * 64 + 16, rowIdx * 64 + 16, 1);
+              _this4.graphics.bugs[Math.round(Math.random() * 3)].draw(cellIdx * 64 + 16, rowIdx * 64 + 16, 1);
             }
 
             if (cell === '@') {
-              _this3.graphics.coffee.draw(cellIdx * 64 + 16, rowIdx * 64 + 20, 1);
+              _this4.graphics.coffee.draw(cellIdx * 64 + 16, rowIdx * 64 + 20, 1);
             }
 
             if (cell === 'D') {
-              _this3.graphics.dragon[1].draw(cellIdx * 64 + 14, rowIdx * 64 + 2, 1);
+              _this4.graphics.dragon[1].draw(cellIdx * 64 + 14, rowIdx * 64 + 2, 1);
             }
           }
         });
@@ -351,38 +409,6 @@ function () {
   return GameState;
 }();
 
-var GameEventEmitter =
-/*#__PURE__*/
-function () {
-  function GameEventEmitter() {
-    _classCallCheck(this, GameEventEmitter);
-  }
-
-  _createClass(GameEventEmitter, [{
-    key: "construtor",
-    value: function construtor() {
-      this.subscribers = [];
-      window.addEventListener('keyup', function (e) {
-        console.log(e);
-      });
-    }
-  }, {
-    key: "subscribeOnEvents",
-    value: function subscribeOnEvents(subscriber) {
-      this.subscribers.push(subscriber);
-    }
-  }, {
-    key: "emitEvent",
-    value: function emitEvent(eventType) {
-      this.subscribers.forEach(function (subscriber) {
-        subscriber(eventType);
-      });
-    }
-  }]);
-
-  return GameEventEmitter;
-}();
-
 var canvas = document.getElementById('canvas');
 var ctx = canvas.getContext('2d');
 var gameEventEmitter = new GameEventEmitter();
@@ -391,11 +417,7 @@ loadImg('assets/canvas-bg.png').then(function (img) {
   loadGraphic(ctx).then(function (graphic) {
     console.log(graphic);
     gameState.setGraphics(graphic);
-<<<<<<< HEAD
     gameState.loadLevel('/assets/level.txt');
-    gameState.MoveDargonDown();
-=======
-    gameState.loadLevel('/assets/level.txt'); //gameEventEmitter.subscribeOnEvents(()
->>>>>>> master
+    gameEventEmitter.subscribeOnEvents(gameState.onEvent);
   });
 });
