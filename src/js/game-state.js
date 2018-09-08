@@ -1,4 +1,4 @@
-
+import * as eventTypes from './game-event-emitter';
 export default class GameState{
     constructor(ctx, canvas, bg) {
         this.collectedBugs=0;
@@ -76,7 +76,22 @@ export default class GameState{
 
     onEvent(eventType){
         switch(eventType){
-
+            case eventTypes.RIGHT: 
+                console.log('move right');
+                this.MoveDragonRight();
+                break;
+            case eventTypes.TOP: 
+                console.log('move top');
+                break;
+            case eventTypes.BOTTOM: 
+                console.log('move bottom');
+                break;
+            case eventTypes.LEFT: 
+                console.log('move left');
+                this.MoveDragonLeft();
+                break;
+            default:
+                return;
         }
     }
 
@@ -168,5 +183,4 @@ export default class GameState{
         res |= (y === level.length - 1 || x === level[y + 1].length - 1 || level[y + 1][x + 1] === '#') ? 1 : 0;
         return res;
     }
-    emitMovement(direction){}
 }

@@ -1,8 +1,8 @@
 export default class GameEventEmitter {
-    construtor() {
+    constructor() {
         this.subscribers = [];
         window.addEventListener('keyup', (e) => {
-            console.log(e)
+            this.emitEvent(e.keyCode);
         })
     }
 
@@ -16,3 +16,9 @@ export default class GameEventEmitter {
         })
     }
 }
+
+// event types
+export const RIGHT = 39;
+export const TOP = 38;
+export const LEFT = 37;
+export const BOTTOM = 40;
