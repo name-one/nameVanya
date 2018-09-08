@@ -10,5 +10,6 @@ loadImage('assets/canvas-bg.png').then(img => {
         console.log(graphic)
         gameState.setGraphics(graphic);
         gameState.loadLevel('/assets/level.txt')
+        gameState.MoveDargonDown();
     });
 })

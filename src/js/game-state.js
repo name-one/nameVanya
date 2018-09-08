@@ -14,7 +14,45 @@ export default class GameState{
         this.textMap;
         this.tileStore = new Map();
         this.bg = bg;
+        this.splittedMap = null
+        this.dragonPositionX=0;
+        this.dragonPositionY=0;
     }
+
+    MoveDragonDown(){
+        this.splittedMap[this.dragonPositionY][this.dragonPositionX] = '-';
+        this.dragonPositionY++;
+        this.splittedMap[this.dragonPositionY][this.dragonPositionX] = 'D';
+        this.renderLevel(this.splittedMap);
+    }
+
+    MoveDragonUp(){
+        this.splittedMap[this.dragonPositionY][this.dragonPositionX] = '-';
+        this.dragonPositionY--;
+        this.splittedMap[this.dragonPositionY][this.dragonPositionX] = 'D';
+        this.renderLevel(this.splittedMap);
+    }
+
+    MoveDragonLeft(){
+        this.splittedMap[this.dragonPositionY][this.dragonPositionX] = '-';
+        this.dragonPositionX++;
+        this.splittedMap[this.dragonPositionY][this.dragonPositionX] = 'D';
+        this.renderLevel(this.splittedMap);
+    }
+
+    MoveDragonRight(){
+        this.splittedMap[this.dragonPositionY][this.dragonPositionX] = '-';
+        this.dragonPositionX++;
+        this.splittedMap[this.dragonPositionY][this.dragonPositionX] = 'D';
+        this.renderLevel(this.splittedMap);
+    }
+
+    onEvent(eventType){
+        switch(eventType){
+
+        }
+    }
+
 
     initTilesHash() {
         const keys = [327, 485, 325, 455, 463, 461, 487, 357, 453, 333, 365, 335, 359, 493, 367];
@@ -32,7 +70,11 @@ export default class GameState{
         .then(response => response.text())
         .then(text => {
             this.textMap = text;
-            this.renderLevel(text.split('\n').map(row => row.split('')));
+            this.splittedMap = text.split('\n').map(row => row.split(''));
+            this.renderLevel(this.splittedMap);
+        })
+        .then((data)=>{
+            this.MoveDragonDown();
         })
     }
 

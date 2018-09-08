@@ -206,9 +206,47 @@ function () {
     this.textMap;
     this.tileStore = new Map();
     this.bg = bg;
+    this.splittedMap = null;
+    this.dragonPositionX = 0;
+    this.dragonPositionY = 0;
   }
 
   _createClass(GameState, [{
+    key: "MoveDragonDown",
+    value: function MoveDragonDown() {
+      this.splittedMap[this.dragonPositionY][this.dragonPositionX] = '-';
+      this.dragonPositionY++;
+      this.splittedMap[this.dragonPositionY][this.dragonPositionX] = 'D';
+      this.renderLevel(this.splittedMap);
+    }
+  }, {
+    key: "MoveDragonUp",
+    value: function MoveDragonUp() {
+      this.splittedMap[this.dragonPositionY][this.dragonPositionX] = '-';
+      this.dragonPositionY--;
+      this.splittedMap[this.dragonPositionY][this.dragonPositionX] = 'D';
+      this.renderLevel(this.splittedMap);
+    }
+  }, {
+    key: "MoveDragonLeft",
+    value: function MoveDragonLeft() {
+      this.splittedMap[this.dragonPositionY][this.dragonPositionX] = '-';
+      this.dragonPositionX++;
+      this.splittedMap[this.dragonPositionY][this.dragonPositionX] = 'D';
+      this.renderLevel(this.splittedMap);
+    }
+  }, {
+    key: "MoveDragonRight",
+    value: function MoveDragonRight() {
+      this.splittedMap[this.dragonPositionY][this.dragonPositionX] = '-';
+      this.dragonPositionX++;
+      this.splittedMap[this.dragonPositionY][this.dragonPositionX] = 'D';
+      this.renderLevel(this.splittedMap);
+    }
+  }, {
+    key: "onEvent",
+    value: function onEvent(eventType) {}
+  }, {
     key: "initTilesHash",
     value: function initTilesHash() {
       var _this = this;
@@ -233,10 +271,13 @@ function () {
         return response.text();
       }).then(function (text) {
         _this2.textMap = text;
-
-        _this2.renderLevel(text.split('\n').map(function (row) {
+        _this2.splittedMap = text.split('\n').map(function (row) {
           return row.split('');
-        }));
+        });
+
+        _this2.renderLevel(_this2.splittedMap);
+      }).then(function (data) {
+        _this2.MoveDragonDown();
       });
     }
   }, {
@@ -318,5 +359,6 @@ loadImg('assets/canvas-bg.png').then(function (img) {
     console.log(graphic);
     gameState.setGraphics(graphic);
     gameState.loadLevel('/assets/level.txt');
+    gameState.MoveDargonDown();
   });
 });
