@@ -194,9 +194,9 @@ function () {
     _classCallCheck(this, GameState);
 
     this.collectedBugs = 0;
-    this.uncollectedBugs = 0;
+    this.uncollectedBugs = 3;
     this.gameTime = '';
-    this.coffeeCups = 0;
+    this.coffeeCups = 1;
     this.isWin = false;
     this.isLose = false;
     this.graphics = null;
@@ -214,34 +214,57 @@ function () {
   _createClass(GameState, [{
     key: "MoveDragonDown",
     value: function MoveDragonDown() {
-      this.splittedMap[this.dragonPositionY][this.dragonPositionX] = '-';
-      this.dragonPositionY++;
-      this.splittedMap[this.dragonPositionY][this.dragonPositionX] = 'D';
-      this.renderLevel(this.splittedMap);
+      if (!this.isWall(this.splittedMap, this.dragonPositionX, this.dragonPositionY + 1)) {
+        this.splittedMap[this.dragonPositionY][this.dragonPositionX] = '-';
+        this.dragonPositionY++;
+        this.splittedMap[this.dragonPositionY][this.dragonPositionX] = 'D';
+        this.renderLevel(this.splittedMap);
+      }
     }
   }, {
     key: "MoveDragonUp",
     value: function MoveDragonUp() {
-      this.splittedMap[this.dragonPositionY][this.dragonPositionX] = '-';
-      this.dragonPositionY--;
-      this.splittedMap[this.dragonPositionY][this.dragonPositionX] = 'D';
-      this.renderLevel(this.splittedMap);
+      if (!this.isWall(this.splittedMap, this.dragonPositionX, this.dragonPositionY - 1)) {
+        this.splittedMap[this.dragonPositionY][this.dragonPositionX] = '-';
+        this.dragonPositionY--;
+        this.splittedMap[this.dragonPositionY][this.dragonPositionX] = 'D';
+        this.renderLevel(this.splittedMap);
+      }
     }
   }, {
     key: "MoveDragonLeft",
     value: function MoveDragonLeft() {
-      this.splittedMap[this.dragonPositionY][this.dragonPositionX] = '-';
-      this.dragonPositionX++;
-      this.splittedMap[this.dragonPositionY][this.dragonPositionX] = 'D';
-      this.renderLevel(this.splittedMap);
+      if (!this.isWall(this.splittedMap, this.dragonPositionX + 1, this.dragonPositionY)) {
+        this.splittedMap[this.dragonPositionY][this.dragonPositionX] = '-';
+        this.dragonPositionX++;
+        this.splittedMap[this.dragonPositionY][this.dragonPositionX] = 'D';
+        this.renderLevel(this.splittedMap);
+      }
     }
   }, {
     key: "MoveDragonRight",
     value: function MoveDragonRight() {
-      this.splittedMap[this.dragonPositionY][this.dragonPositionX] = '-';
-      this.dragonPositionX++;
-      this.splittedMap[this.dragonPositionY][this.dragonPositionX] = 'D';
-      this.renderLevel(this.splittedMap);
+      if (!this.isWall(this.splittedMap, this.dragonPositionX - 1, this.dragonPositionY)) {
+        this.splittedMap[this.dragonPositionY][this.dragonPositionX] = '-';
+        this.dragonPositionX--;
+        this.splittedMap[this.dragonPositionY][this.dragonPositionX] = 'D';
+        this.renderLevel(this.splittedMap);
+      }
+    }
+  }, {
+    key: "isWall",
+    value: function isWall(gameMap, x, y) {
+      if (gameMap[y][x] == '#') return true;else return false;
+    }
+  }, {
+    key: "isBug",
+    value: function isBug(gameMap, x, y) {
+      if (gameMap[y][x] == '*') return true;else return false;
+    }
+  }, {
+    key: "isCoffee",
+    value: function isCoffee(gameMap, x, y) {
+      if (gameMap[y][x] == '@') return true;else return false;
     }
   }, {
     key: "onEvent",
