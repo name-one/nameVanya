@@ -271,9 +271,9 @@ function () {
   }, {
     key: "MoveDragonLeft",
     value: function MoveDragonLeft() {
-      if (!this.isWall(this.splittedMap, this.dragonPositionX + 1, this.dragonPositionY)) {
+      if (!this.isWall(this.splittedMap, this.dragonPositionX - 1, this.dragonPositionY)) {
         this.splittedMap[this.dragonPositionY][this.dragonPositionX] = '-';
-        this.dragonPositionX++;
+        this.dragonPositionX--;
         this.splittedMap[this.dragonPositionY][this.dragonPositionX] = 'D';
         this.renderLevel(this.splittedMap);
       }
@@ -281,9 +281,9 @@ function () {
   }, {
     key: "MoveDragonRight",
     value: function MoveDragonRight() {
-      if (!this.isWall(this.splittedMap, this.dragonPositionX - 1, this.dragonPositionY)) {
+      if (!this.isWall(this.splittedMap, this.dragonPositionX + 1, this.dragonPositionY)) {
         this.splittedMap[this.dragonPositionY][this.dragonPositionX] = '-';
-        this.dragonPositionX--;
+        this.dragonPositionX++;
         this.splittedMap[this.dragonPositionY][this.dragonPositionX] = 'D';
         this.renderLevel(this.splittedMap);
       }
@@ -314,10 +314,12 @@ function () {
 
         case TOP:
           console.log('move top');
+          this.MoveDragonUp();
           break;
 
         case BOTTOM:
           console.log('move bottom');
+          this.MoveDragonDown();
           break;
 
         case LEFT:
@@ -359,9 +361,9 @@ function () {
         });
 
         _this3.renderLevel(_this3.splittedMap);
-      }).then(function (data) {
-        _this3.MoveDragonDown();
-      });
+      }); //   .then((data)=>{
+      //       this.MoveDragonDown();
+      //   })
     }
   }, {
     key: "renderLevel",

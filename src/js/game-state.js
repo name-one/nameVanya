@@ -40,20 +40,20 @@ export default class GameState{
     }
 
     MoveDragonLeft(){
-        if(!this.isWall(this.splittedMap,this.dragonPositionX+1,this.dragonPositionY))
+        if(!this.isWall(this.splittedMap,this.dragonPositionX-1,this.dragonPositionY))
         {
         this.splittedMap[this.dragonPositionY][this.dragonPositionX] = '-';
-        this.dragonPositionX++;
+        this.dragonPositionX--;
         this.splittedMap[this.dragonPositionY][this.dragonPositionX] = 'D';
         this.renderLevel(this.splittedMap);
         }
     }
 
     MoveDragonRight(){
-        if(!this.isWall(this.splittedMap,this.dragonPositionX-1,this.dragonPositionY))
+        if(!this.isWall(this.splittedMap,this.dragonPositionX+1,this.dragonPositionY))
         {
         this.splittedMap[this.dragonPositionY][this.dragonPositionX] = '-';
-        this.dragonPositionX--;
+        this.dragonPositionX++;
         this.splittedMap[this.dragonPositionY][this.dragonPositionX] = 'D';
         this.renderLevel(this.splittedMap);
         }
@@ -82,9 +82,12 @@ export default class GameState{
                 break;
             case eventTypes.TOP: 
                 console.log('move top');
+                this.MoveDragonUp();
+              
                 break;
             case eventTypes.BOTTOM: 
                 console.log('move bottom');
+                this.MoveDragonDown();
                 break;
             case eventTypes.LEFT: 
                 console.log('move left');
@@ -115,9 +118,9 @@ export default class GameState{
             this.splittedMap = text.split('\n').map(row => row.split(''));
             this.renderLevel(this.splittedMap);
         })
-        .then((data)=>{
-            this.MoveDragonDown();
-        })
+     //   .then((data)=>{
+     //       this.MoveDragonDown();
+     //   })
     }
 
     renderLevel(level) {
